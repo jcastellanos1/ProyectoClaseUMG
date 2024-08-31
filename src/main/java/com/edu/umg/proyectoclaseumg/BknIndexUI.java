@@ -5,7 +5,7 @@
 package com.edu.umg.proyectoclaseumg;
 
 
-
+//si jala
 import com.edu.umg.DTO.PersonaDTO;
 import com.edu.umg.bdd.DMLBdd;
 import java.io.Serializable;
