@@ -1,0 +1,33 @@
+.ui-button.mi-boton-verde-brillante {
+    background-color: #72BA3F;
+    color: #FFFFFF;
+    border-color: #72BA3F;
+}
+
+.ui-button.mi-boton-verde-brillante:hover {
+    background-color: #66A738;
+    border-color: #5C9332;
+}
+
+/* Archivo: styleAgregarPersona.css */
+html {
+    font-size: 100%;
+}
+
+
+
+.ui-button, .ui-inputtext {
+    font-size: 0.9rem;
+}
+
+h1, h2, h3, h4, h5 {
+    font-size: 1.1rem;
+}
+
+
+#personaForm\\:messages {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}

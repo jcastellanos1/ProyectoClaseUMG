@@ -1,0 +1,34 @@
+.fieldset-estilo {
+    margin-bottom: 20px;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.grid {
+    display: flex;
+    gap: 20px;
+}
+
+.col-6 {
+    flex: 1;
+}
+
+.button-add {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.ui-button.btn-estilo {
+    font-size: 12px;
+    padding: 5px 10px;
+    float: left;
+}
+
+
+
+

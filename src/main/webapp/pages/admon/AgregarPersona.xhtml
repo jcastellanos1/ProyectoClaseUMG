@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>Gestión de Personas</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/primeicons/6.0.0/primeicons.min.css"/>
+        <h:outputStylesheet name="css/Styles.css"/>
+    </h:head>
+
+    <h:body>
+        <h:form id="personaForm">
+
+
+            <p:toolbar>
+                <p:toolbarGroup align="left">
+                    <p:commandButton value="Volver a Inicio" action="#{agregarPersonaUI.irMostrarDatos()}"  
+                                     styleClass="ui-button-secondary">
+                        <i class="pi pi-angle-left"></i>
+                    </p:commandButton>
+                </p:toolbarGroup>
+            </p:toolbar>
+
+            <p:panel header="Agregar Persona">
+                <div class="nose">
+                    <h5>Llene el Formulario</h5>
+                </div>
+                <p:panelGrid columns="2" columnClasses="label,value">
+                    <p:outputLabel for="nombre" value="Nombre: *"/>
+                    <p:inputText id="nombre" value="#{agregarPersonaUI.persona.nombre}" />
+
+                    <p:outputLabel for="apellido" value="Apellido: *"/>
+                    <p:inputText id="apellido" value="#{agregarPersonaUI.persona.apellido}" />
+
+                    <p:outputLabel for="telefono" value="Teléfono: *"/>
+                    <p:inputText id="telefono" value="#{agregarPersonaUI.persona.telefono}" />
+
+                    <p:outputLabel for="correo" value="Correo: *"/>
+                    <p:inputText id="correo" value="#{agregarPersonaUI.persona.correo}" />
+                </p:panelGrid>
+
+                <p:commandButton value="Guardar" icon="pi pi-save" iconPos="right" action="#{agregarPersonaUI.agregarPersona()}" 
+                                 update=":personaForm :personaForm:personaTable" 
+                                 style="margin-left: 250px; margin-top: 10px;"
+                                 styleClass="mi-boton-verde-brillante"/>
+
+            </p:panel>
+
+            <!-- Tabla para mostrar personas -->
+            <p:panel header="Lista de Personas">
+                <p:dataTable id="personaTable" value="#{agregarPersonaUI.list}" var="persona" rendered="#{agregarPersonaUI.mostrarDatos}">
+                    <p:column headerText="ID">
+                        <h:outputText value="#{persona.idPersona}"/>
+                    </p:column>
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{persona.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Apellido">
+                        <h:outputText value="#{persona.apellido}"/>
+                    </p:column>
+                    <p:column headerText="Teléfono">
+                        <h:outputText value="#{persona.telefono}"/>
+                    </p:column>
+                    <p:column headerText="Correo">
+                        <h:outputText value="#{persona.correo}"/>
+                    </p:column>
+                    <p:column headerText="Estado">
+                        <h:outputText value="#{persona.estado eq 1 ? 'Activo' : 'Inactivo'}"/>
+                    </p:column>
+                    <p:column headerText="Acciones">
+                        <p:commandButton 
+                            value="Modificar" 
+                            icon="pi pi-user-edit" 
+                            iconPos="right"
+                            oncomplete="PF('modificarDialog').show()" 
+                            actionListener="#{agregarPersonaUI.mostrarDialogo(persona)}" 
+                            update=":personaForm:modificarPanel :personaForm:messages" 
+                            styleClass="ui-button-raised ui-button-secondary" 
+                            style="display:inline-block; margin-right:10px;"
+                            />
+
+                        <p:commandButton 
+                            value="Eliminar" 
+                            icon="pi pi-user-minus" 
+                            iconPos="right"
+                            action="#{agregarPersonaUI.eliminarPersona(persona)}" 
+                            update=":personaForm:personaTable :personaForm:messages" 
+                            styleClass="ui-button-raised ui-button-danger" 
+                            style="display:inline-block;"
+                            />
+                    </p:column>
+
+                </p:dataTable>
+            </p:panel>
+
+            <!-- Diálogo de Modificación de Persona -->
+            <p:dialog header="Modificar Persona" widgetVar="modificarDialog" modal="true" resizable="false" width="400px">
+
+                <p:panelGrid id="modificarPanel" columns="2" columnClasses="label,value">
+                    <h:outputLabel value="Nombre: " />
+                    <h:panelGroup style="display: flex; align-items: center;">
+                        <h:outputText value="#{agregarPersonaUI.personaModify.nombre}" style="margin-right: 10px;" />
+                        <h:outputText value="#{agregarPersonaUI.personaModify.apellido}" />
+                    </h:panelGroup>
+
+                    <p:outputLabel for="telefonoModificar" value="Teléfono: *"/>
+                    <p:inputText id="telefonoModificar" value="#{agregarPersonaUI.personaModify.telefono}" />
+
+                    <p:outputLabel for="correoModificar" value="Correo: *"/>
+                    <p:inputText id="correoModificar" value="#{agregarPersonaUI.personaModify.correo}" />
+
+                    <p:outputLabel for="estadoModificar" value="Estado: *"/>
+                    <p:inputText id="estadoModificar" value="#{agregarPersonaUI.personaModify.estado}"/>
+                </p:panelGrid>
+
+
+                <p:commandButton value="Guardar" icon="pi pi-save" iconPos="right" action="#{agregarPersonaUI.modificarPersona()}" 
+                                 update=":personaForm:personaTable :personaForm:messages" 
+                                 oncomplete="PF('modificarDialog').hide()" 
+                                 styleClass="mi-boton-verde-brillante"/>
+
+            </p:dialog>
+
+            <!-- Mensajes de Notificación -->
+            <p:growl id="messages" showDetail="true" showSummary="false" />
+
+        </h:form>
+    </h:body>
+</html>

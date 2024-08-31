@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <h:outputStylesheet name="css/styleAgregarPersona.css"/>
+    </h:head>
+
+    <h:body>
+        <h:form id="frmPrincipal">
+            <h:panelGroup id="grpPrincipal">
+                <p:outputPanel id="pnlPrincipal">
+                   <p:fieldset id="Buscar" legend="Buscar Persona" styleClass="fieldset-estilo">
+    <div class="form-container">
+        <div class="grid ui-fluid">
+            <div class="col-6">
+                <div class="ui-inputgroup">
+                    <div class="ui-inputgroup-addon">
+                        <i class="pi pi-user"></i>
+                    </div>
+                    <p:inputText id="txtNombre" value="#{bkn_indexUI.nombre}" placeholder="Nombre" />
+                </div>
+            </div>
+            
+            <div class="col-6">
+                <div class="ui-inputgroup">
+                    <p:inputText id="txtApellido" value="#{bkn_indexUI.apellido}" placeholder="Apellido" />
+                    <p:commandButton icon="pi pi-search" styleClass="ui-button-warning" 
+                                     action="#{bkn_indexUI.buscarPersonaP()}"
+                                     update=":frmPrincipal:flsDatos :frmPrincipal:messages"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-add">
+            <p:commandButton id="btnInsertarPersona" value="Agregar Persona" 
+                             icon="pi pi-user-plus" iconPos="right" styleClass="ui-button btn-estilo"
+                             action="#{bkn_indexUI.irAInsertarPersona()}" />
+        </div>
+    </div>
+</p:fieldset>
+
+
+                    <!-- Mensajes -->
+                    <p:messages id="messages" showDetail="true" showSummary="false" styleClass="messages-estilo" />
+
+                    <!-- Tabla de datos -->
+                    <p:fieldset id="flsDatos" legend="Datos Persona" styleClass="fieldset-estilo">
+                        <p:dataTable value="#{bkn_indexUI.list}" var="dato">
+                            <p:column headerText="Nombre: ">
+                                <p:outputLabel value="#{dato.nombre}"/>
+                            </p:column>
+                            <p:column headerText="Apellido: ">
+                                <p:outputLabel value="#{dato.apellido}"/>
+                            </p:column>
+                            <p:column headerText="Teléfono: ">
+                                <p:outputLabel value="#{dato.telefono}"/>
+                            </p:column>
+                            <p:column headerText="Correo: ">
+                                <p:outputLabel value="#{dato.correo}"/>
+                            </p:column>
+                            <p:column headerText="Estado: ">
+                                <p:outputLabel value="#{dato.estado eq 1 ? 'Activo' : 'Inactivo'}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:fieldset>
+
+                    <!-- Botón para mostrar el diálogo de datos -->
+                    <p:commandButton id="mostrarDatos" value="Mostrar Datos" icon="pi pi-eye" iconPos="right" styleClass="ui-button btn-estilo"
+                                     action="#{bkn_indexUI.cargarDatos()}"
+                                     update=":frmPrincipal:datosDialog :frmPrincipal:messages"
+                                     oncomplete="PF('datosDialog').show()" /> 
+                </p:outputPanel>
+            </h:panelGroup>
+
+            <!-- Diálogo de PrimeFaces para mostrar los datos -->
+            <p:dialog id="datosDialog" header="Datos Persona" widgetVar="datosDialog" 
+                      modal="true" draggable="false" resizable="true" showEffect="fade" hideEffect="fade"
+                      closeOnEscape="true" styleClass="customDialog">
+
+                <p:dataTable value="#{bkn_indexUI.list}" var="dato" scrollable="true" scrollHeight="400" style="width: 100%;">
+                    <p:column headerText="Nombre: ">
+                        <p:outputLabel value="#{dato.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Apellido: ">
+                        <p:outputLabel value="#{dato.apellido}"/>
+                    </p:column>
+                    <p:column headerText="Teléfono: ">
+                        <p:outputLabel value="#{dato.telefono}"/>
+                    </p:column>
+                    <p:column headerText="Correo: ">
+                        <p:outputLabel value="#{dato.correo}"/>
+                    </p:column>
+                    <p:column headerText="Estado: ">
+                        <p:outputLabel value="#{dato.estado eq 1 ? 'Activo' : 'Inactivo'}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:dialog>
+        </h:form>
+    </h:body>
+</html>
