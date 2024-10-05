@@ -19,7 +19,7 @@ public class AgregarPersonaUI implements Serializable {
     private persona personaModify;
     private List<persona> list;
     private boolean mostrarDatos = false;
-    
+//Cambios
 
     @PostConstruct
     public void init() {
