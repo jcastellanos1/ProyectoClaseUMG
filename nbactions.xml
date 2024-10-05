@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-SonarClase</actionName>
+            <displayName>SonarClase</displayName>
+            <goals>
+                <goal>sonar:sonar</goal>
+            </goals>
+            <properties>
+                <sonar.projectKey>ProyectoClaseUMG</sonar.projectKey>
+                <sonar.host.url>http://192.168.191.52:9000</sonar.host.url>
+                <sonar.login>478d0820f36c1d98045c58e27aee9a60b1885cea</sonar.login>
+            </properties>
+        </action>
+    </actions>

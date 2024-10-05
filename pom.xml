@@ -13,12 +13,7 @@
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     
-    <sonar.host.url>http://192.168.1.8:9000</sonar.host.url>
-    <sonar.login>cc4026bd5bb04b575a18bfad108ab2ee1eaf2594</sonar.login>
-    <sonar.projectKey>com.example:my-project</sonar.projectKey>
-    <sonar.projectName>My Project</sonar.projectName>
-    <sonar.language>java</sonar.language>
-    <sonar.sources>src/main/java</sonar.sources>
+   
 </properties>
 
     <dependencies>

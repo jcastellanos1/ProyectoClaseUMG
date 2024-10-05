@@ -6,7 +6,7 @@ package com.edu.umg.proyectoclaseumg;
 
 
 //si jala
-import com.edu.umg.DTO.PersonaDTO;
+import com.edu.umg.DTO.persona;
 import com.edu.umg.bdd.DMLBdd;
 import java.io.Serializable;
 import java.sql.SQLException;
@@ -34,21 +34,21 @@ public class BknIndexUI implements Serializable{
   private Number telefono;
   private String correo;
   private Number estado;
-  private List<PersonaDTO>list;
+  private List<persona>list;
   private boolean mostrarDatos = true;
 
  
     /**
      * @return the list
      */
-    public List<PersonaDTO> getList() {
+    public List<persona> getList() {
         return list;
     }
 
     /**
      * @param list the list to set
      */
-    public void setList(List<PersonaDTO> list) {
+    public void setList(List<persona> list) {
         this.list = list;
     }
 
@@ -59,12 +59,12 @@ public class BknIndexUI implements Serializable{
 
     
     private DMLBdd dml;
-    private PersonaDTO persona;
-    private PersonaDTO personaModify;
+    private persona persona;
+    private persona personaModify;
     
   @PostConstruct
     public void init() {
-        persona = new PersonaDTO();
+        persona = new persona();
         dml = new DMLBdd();
        // cargarDatos(); // Llamada al método para cargar los datos al iniciar
     }
@@ -77,16 +77,16 @@ public String irAInsertarPersona() {
     
     
     
-   public void cargarDatos() {
-        try {
-        
-            list = dml.listaPersona();
-            mostrarDatos = true; // Muestra la tabla después de cargar los datos
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+public void cargarDatos() {
+    try {
+        list = dml.listaPersona();
+        mostrarDatos = true; // Muestra la tabla después de cargar los datos
+    } catch (Exception e) {
+        e.printStackTrace();
+        FacesContext.getCurrentInstance().addMessage(null, 
+            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error al cargar datos: " + e.getMessage()));
     }
-
+}
     public boolean isMostrarDatos() {
         return mostrarDatos;
     }
@@ -94,6 +94,17 @@ public String irAInsertarPersona() {
     public void cerrarDialogo() {
         mostrarDatos = false; // Oculta el diálogo
     }
+
+   
+    // Getters y Setters para persona
+    public persona getPersona() {
+        return persona;
+    }
+
+    public void setPersona(persona persona) {
+        this.persona = persona;
+    }
+ 
  public void buscarPersonaP() {
     FacesContext context = FacesContext.getCurrentInstance();
 
@@ -120,116 +131,29 @@ public String irAInsertarPersona() {
     }
 
     try {
-        List<PersonaDTO> personasEncontradas = dml.buscarPersona(nombre, apellido);
+        List<persona> personasEncontradas = dml.buscarPersona(nombre, apellido);
+        
+        // Verificar si el resultado es null
+        if (personasEncontradas == null) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                "Error", "Ocurrió un error al buscar personas."));
+            return;
+        }
+
         if (personasEncontradas.isEmpty()) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, 
                 "No se encontraron personas", "No se encontraron personas con el nombre " + nombre + " y apellido " + apellido));
         } else {
             setList(personasEncontradas);
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, 
-                "Número de personas encontradas", "Número de personas encontradas: " + personasEncontradas.size()));
+                "Personas encontradas", "Número de personas encontradas: " + personasEncontradas.size()));
         }
     } catch (Exception ex) {
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-            "Error al buscar personas", "Error al buscar personas: " + ex.getMessage()));
+            "Error", "Error al buscar personas: " + ex.getMessage()));
     }
 }
 
-
-
- 
- 
- 
- /*
- public void agregarPersona() {
-    System.out.println("Método agregarPersona() llamado");
-    
-    if (validarPersona()) {
-        try {
-            DMLBdd dmlBdd = new DMLBdd();
-            persona.setEstado(1);
-            dmlBdd.insertarPersona(persona);
-
-            FacesContext.getCurrentInstance().addMessage(null, 
-                
-                  new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Persona agregada exitosamente"));
-            persona = new PersonaDTO();
-            cargarDatos();
-            // Resetear el objeto persona para futuras inserciones
-            persona = new PersonaDTO();
-        } catch (SQLException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, 
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error al agregar la persona: " + ex.getMessage()));
-        }
-    } else {
-        FacesContext.getCurrentInstance().addMessage(null, 
-            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Por favor, complete todos los campos."));
-    }
-}
-
-private boolean validarPersona() {
-    return persona.getNombre() != null && !persona.getNombre().isEmpty()
-            && persona.getApellido() != null && !persona.getApellido().isEmpty()
-            && persona.getTelefono() != 0
-            && persona.getCorreo() != null && !persona.getCorreo().isEmpty();
-            
-}
-  */
-   
-    // Getters y Setters para persona
-    public PersonaDTO getPersona() {
-        return persona;
-    }
-
-    public void setPersona(PersonaDTO persona) {
-        this.persona = persona;
-    }
- 
- 
- /*
- 
-    public void limpiarCampos() {
-        nombre = "";
-        apellido = "";
-        telefono = 0;
-        correo = "";
-        estado = 0;
-    }
-   public void modificarPersona(PersonaDTO personaModificada) {
-        try {
-            dml.modificarPersona(personaModificada);
-            cargarDatos();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Persona modificada con éxito"));
-        } catch (SQLException e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al modificar la persona", null));
-        }
-    }
-
-  public void eliminarPersona(PersonaDTO persona) {
-        try {
-            dml.eliminarPersona(persona);
-            cargarDatos();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Persona eliminada con éxito"));
-        } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al eliminar la persona", null));
-        }
-    }
-  
-      // Método para mostrar el diálogo de modificación
-    public void mostrarDialogo(PersonaDTO persona) {
-        this.personaModify = persona; // Copia la persona seleccionada para modificarla
-    }
-
-    public PersonaDTO getPersonaModify() {
-        return personaModify;
-    }
-
-    public void setPersonaModify(PersonaDTO personaModify) {
-        this.personaModify = personaModify;
-    }
-
-  
-  */
   
   
     public String getNombre() {

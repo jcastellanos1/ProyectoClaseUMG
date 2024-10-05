@@ -1,6 +1,6 @@
 package com.edu.umg.proyectoclaseumg;
 
-import com.edu.umg.DTO.PersonaDTO;
+import com.edu.umg.DTO.persona;
 import com.edu.umg.bdd.DMLBdd;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -15,17 +15,17 @@ import java.util.List;
 @ViewScoped
 public class AgregarPersonaUI implements Serializable {
     private DMLBdd dml;
-    private PersonaDTO persona;
-    private PersonaDTO personaModify;
-    private List<PersonaDTO> list;
+    private persona persona;
+    private persona personaModify;
+    private List<persona> list;
     private boolean mostrarDatos = false;
     
 
     @PostConstruct
     public void init() {
-        persona = new PersonaDTO();
+        persona = new persona();
         dml = new DMLBdd();
-        personaModify = new PersonaDTO();
+        personaModify = new persona();
       //  mostrarDatos = true;
         cargarDatos();  // Llamada al método para cargar los datos al iniciar
     }
@@ -38,36 +38,31 @@ public class AgregarPersonaUI implements Serializable {
         mostrarDatos = false; // Oculta el diálogo
     }
 
-    public void cargarDatos() {
-        try {
-        
-            list = dml.listaPersona();
-            mostrarDatos = true; // Muestra la tabla después de cargar los datos
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+public void cargarDatos() {
+    try {
+        list = dml.listaPersona();
+        mostrarDatos = true; // Muestra la tabla después de cargar los datos
+    } catch (Exception e) {
+        e.printStackTrace();
+        FacesContext.getCurrentInstance().addMessage(null, 
+            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error al cargar datos: " + e.getMessage()));
     }
+}
 
-  public void agregarPersona() {
+public void agregarPersona() {
     System.out.println("Método agregarPersona() llamado");
-    
+
     if (validarPersona()) {
-        
-        
         try {
-            
             DMLBdd dmlBdd = new DMLBdd();
             persona.setEstado(1);
             dmlBdd.insertarPersona(persona);
 
             FacesContext.getCurrentInstance().addMessage(null, 
-                
-                  new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Persona agregada exitosamente"));
-            persona = new PersonaDTO();
-            cargarDatos();
-            // Resetear el objeto persona para futuras inserciones
-            persona = new PersonaDTO();
-        } catch (SQLException ex) {
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Persona agregada exitosamente"));
+            persona = new persona();
+            cargarDatos(); // Cargar los datos de nuevo
+        } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, 
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error al agregar la persona: " + ex.getMessage()));
         }
@@ -104,26 +99,22 @@ public void modificarPersona() {
     String validationMessage = validarPersona2(personaModify);
     if (validationMessage == null) {
         try {
-            // Llamar al método modificarPersona() de DMLBdd
             dml.modificarPersona(personaModify); // Utiliza personaModify para modificar
 
-            // Actualizar la lista de personas
-         
-            
-            // Mostrar mensaje de éxito
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Persona modificada con éxito"));
-        } catch (SQLException e) {
-            // Manejar la excepción y mostrar un mensaje de error
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al modificar la persona", e.getMessage()));
+            FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage("Persona modificada con éxito"));
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al modificar la persona", e.getMessage()));
         }
     } else {
-        // Si las validaciones fallan, mostrar un mensaje de error específico
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", validationMessage));
+        FacesContext.getCurrentInstance().addMessage(null, 
+            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", validationMessage));
     }
-       cargarDatos(); 
+    cargarDatos();
 }
 
-private String validarPersona2(PersonaDTO persona) {
+private String validarPersona2(persona persona) {
     // Verificar que ningún campo esté vacío o sea null
     if (persona.getNombre() == null || persona.getNombre().isEmpty()) {
         return "El nombre no puede estar vacío.";
@@ -157,50 +148,49 @@ public String irMostrarDatos() {
     return "MostrarPersona?faces-redirect=true";
 }
 
- public void eliminarPersona(PersonaDTO persona) {
+public void eliminarPersona(persona persona) {
     try {
-        System.out.println("Método eliminarPersona() llamado");
         DMLBdd dmlBdd2 = new DMLBdd();
-        
-        // Llama al método en DMLBdd para eliminar la persona
-        dmlBdd2.eliminarPersona(persona); // Aquí 'persona' es el objeto PersonaDTO a eliminar
-        
-        cargarDatos(); // Actualiza la lista de personas o realiza otra acción necesaria
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Persona eliminada con éxito"));
-    } catch (SQLException e) {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al eliminar la persona", e.getMessage()));
+        dmlBdd2.eliminarPersona(persona); // Elimina la persona
+
+        cargarDatos(); // Actualiza la lista de personas
+        FacesContext.getCurrentInstance().addMessage(null, 
+            new FacesMessage("Persona eliminada con éxito"));
+    } catch (Exception e) {
+        FacesContext.getCurrentInstance().addMessage(null, 
+            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al eliminar la persona", e.getMessage()));
     }
 }
 
     
-public void mostrarDialogo(PersonaDTO persona) {
+public void mostrarDialogo(persona persona) {
     this.personaModify = persona;
     System.out.println("Mostrando diálogo para modificar persona con ID: " + persona.getIdPersona());
     System.out.println("Estado actual: " + persona.getEstado()); // Mensaje de depuración adicional
 }
 
     
-    public List<PersonaDTO> getList() {
+    public List<persona> getList() {
         return list;
     }
 
-    public void setList(List<PersonaDTO> list) {
+    public void setList(List<persona> list) {
         this.list = list;
     }
 
-    public PersonaDTO getPersona() {
+    public persona getPersona() {
         return persona;
     }
 
-    public void setPersona(PersonaDTO persona) {
+    public void setPersona(persona persona) {
         this.persona = persona;
     }
 
-    public PersonaDTO getPersonaModify() {
+    public persona getPersonaModify() {
         return personaModify;
     }
 
-    public void setPersonaModify(PersonaDTO personaModify) {
+    public void setPersonaModify(persona personaModify) {
         this.personaModify = personaModify;
     }
 }
